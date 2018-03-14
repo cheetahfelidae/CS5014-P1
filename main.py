@@ -14,6 +14,7 @@ def get_scores(model, x_train, y_train, scoring_val="neg_mean_squared_error", cv
     scores = cross_val_score(model, x_train, y_train, scoring=scoring_val, cv=cv_val)
     return scores
 
+
 x_train = np.loadtxt("x_train.txt")
 x_train = np.c_[np.ones_like(x_train), x_train]
 y_train = np.loadtxt("y_train.txt")

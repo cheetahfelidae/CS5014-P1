@@ -2,10 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 from sklearn.base import BaseEstimator, TransformerMixin
-import matplotlib.pyplot as plt
 
 
 class DataFrameSelector(BaseEstimator, TransformerMixin):
@@ -34,7 +31,7 @@ for index, row in energy.iterrows():
     nsm_list.append(calculate_nms(dt_obj))
 
 energy["nsm"] = nsm_list
-energy.drop(["rv1", "rv2", "date"], axis=1, inplace=True)
+energy.drop(["rv1", "rv2", "date", "Visibility", "RH_5"], axis=1, inplace=True)
 
 energy.hist(bins=50, figsize=(20, 15))
 # energy.info()
@@ -43,11 +40,14 @@ print(energy.corr()['Appliances'].sort_values(ascending=False))
 print(energy.describe())
 
 train_set, test_set = train_test_split(energy, test_size=0.2, random_state=42)
-X_train = train_set.drop("Appliances", axis=1)
-Y_train = train_set["Appliances"].copy()
+x_train = train_set.drop("Appliances", axis=1)
+y_train = train_set["Appliances"].copy()
 
 xTest = test_set.drop("Appliances", axis=1)
 yTest = test_set["Appliances"].copy()
+
+np.savetxt("x_train.txt", x_train)
+np.savetxt("y_train.txt", y_train)
 
 np.savetxt("x_test.txt", xTest)
 np.savetxt("y_test.txt", yTest)
