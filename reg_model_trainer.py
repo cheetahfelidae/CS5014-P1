@@ -19,10 +19,8 @@ parser.add_argument('-sgd', action='store_true', help='Use the use linear regres
 args = parser.parse_args()
 
 ''' ################### Training ##################### '''
-trainingX = np.loadtxt('x_train.txt')
+training_x = np.loadtxt('x_train.txt')
 trainingY = np.loadtxt('y_train.txt')
-
-args.ln = True
 
 if args.ln is True:
     print("Use linear regression model")
@@ -30,41 +28,41 @@ if args.ln is True:
 
 elif args.rid is True:
     print("Use Ridge regression model")
-    fullPipeLine = Pipeline([
+    full_pipe_line = Pipeline([
         ("polynomial", PolynomialFeatures(degree=2, include_bias=False)),
         ("stf_scale", StandardScaler())
     ])
 
-    trainingX = fullPipeLine.fit_transform(trainingX)
+    training_x = full_pipe_line.fit_transform(training_x)
     reg_model = Ridge()
 
-elif args.poly is True:  #
+elif args.poly is True:
     print("Use Polynomial regression model")
-    fullPipeLine = Pipeline([
+    full_pipe_line = Pipeline([
         ("polynomial", PolynomialFeatures(degree=2, include_bias=False)),
         ("stf_scale", StandardScaler())
     ])
 
-    trainingX = fullPipeLine.fit_transform(trainingX)
+    training_x = full_pipe_line.fit_transform(training_x)
     reg_model = LinearRegression()
 elif args.sgd is True:
     print("Use Stochastic Gradient Descent model")
-    fullPipeLine = Pipeline([
+    full_pipe_line = Pipeline([
         ("stf_scale", StandardScaler())
     ])
-    trainingX = fullPipeLine.fit_transform(trainingX)
+    training_x = full_pipe_line.fit_transform(training_x)
     reg_model = SGDRegressor(penalty="l2")
 else:
     print("Please select the regression model")
     quit()
 
-reg_model.fit(trainingX, trainingY)
+reg_model.fit(training_x, trainingY)
 
-y_hat = reg_model.predict(trainingX)
+y_hat = reg_model.predict(training_x)
 
 # Save into file
 joblib.dump(reg_model, "trainedReg.pkl")
-scores = cross_val_score(reg_model, trainingX, trainingY, scoring="neg_mean_squared_error", cv=10)
+scores = cross_val_score(reg_model, training_x, trainingY, scoring="neg_mean_squared_error", cv=10)
 rmse = np.sqrt(-scores)
 
 print("Training result")
@@ -76,16 +74,16 @@ print("Standard deviation", rmse.std())
 print('MSE = ', mean_squared_error(trainingY, y_hat))
 
 ''' ################ Testing ################## '''
-testingX = np.loadtxt('x_test.txt')
-testingY = np.loadtxt('y_test.txt')
+testing_x = np.loadtxt('x_test.txt')
+testing_y = np.loadtxt('y_test.txt')
 
 # testingX = np.c_[np.ones_like(testingX),testingX]
 if args.ln is False:
-    testingX = fullPipeLine.fit_transform(testingX)
+    testing_x = full_pipe_line.fit_transform(testing_x)
 
-y_hat = reg_model.predict(testingX)
+y_hat = reg_model.predict(testing_x)
 
-mse = mean_squared_error(testingY, y_hat)
+mse = mean_squared_error(testing_y, y_hat)
 rmse = np.sqrt(mse)
 print("")
 print("Testing result")
