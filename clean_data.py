@@ -32,23 +32,22 @@ for index, row in energy.iterrows():
     dt_str = row["date"]
     dt_obj = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
     nsm_list.append(calculate_nms(dt_obj))
+
 energy["nsm"] = nsm_list
 energy.drop(["rv1", "rv2", "date"], axis=1, inplace=True)
+
+energy.hist(bins=50, figsize=(20, 15))
+# energy.info()
+# plt.show()
+print(energy.corr()['Appliances'].sort_values(ascending=False))
+print(energy.describe())
 
 train_set, test_set = train_test_split(energy, test_size=0.2, random_state=42)
 X_train = train_set.drop("Appliances", axis=1)
 Y_train = train_set["Appliances"].copy()
 
-full_pipeline = Pipeline([
-    ("selector", DataFrameSelector(list(X_train))),
-    ("std_scaler", StandardScaler())
-])
+xTest = test_set.drop("Appliances", axis=1)
+yTest = test_set["Appliances"].copy()
 
-X_train = full_pipeline.fit_transform(X_train)
-np.savetxt("x_train", X_train)
-np.savetxt("y_train", Y_train)
-
-energy.hist(bins=50, figsize=(20, 15))
-# energy.info()
-print(energy.describe())
-plt.show()
+np.savetxt("x_test.txt", xTest)
+np.savetxt("y_test.txt", yTest)
