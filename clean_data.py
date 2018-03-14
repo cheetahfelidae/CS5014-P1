@@ -45,8 +45,8 @@ full_pipeline = Pipeline([
 ])
 
 X_train = full_pipeline.fit_transform(X_train)
-np.savetxt("X_train", X_train)
-np.savetxt("Y_train", Y_train)
+np.savetxt("x_train", X_train)
+np.savetxt("y_train", Y_train)
 
 energy.hist(bins=50, figsize=(20, 15))
 # energy.info()
