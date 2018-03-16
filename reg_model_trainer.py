@@ -19,8 +19,8 @@ parser.add_argument('-sgd', action='store_true', help='Use the use linear regres
 args = parser.parse_args()
 
 ''' ################### Training ##################### '''
-training_x = np.loadtxt('x_train.txt')
-trainingY = np.loadtxt('y_train.txt')
+training_x = np.loadtxt('training_x.txt')
+training_y = np.loadtxt('training_y.txt')
 
 if args.ln is True:
     print("Use linear regression model")
@@ -56,13 +56,13 @@ else:
     print("Please select the regression model")
     quit()
 
-reg_model.fit(training_x, trainingY)
+reg_model.fit(training_x, training_y)
 
 y_hat = reg_model.predict(training_x)
 
 # Save into file
-joblib.dump(reg_model, "trainedReg.pkl")
-scores = cross_val_score(reg_model, training_x, trainingY, scoring="neg_mean_squared_error", cv=10)
+joblib.dump(reg_model, "trained_reg.pkl")
+scores = cross_val_score(reg_model, training_x, training_y, scoring="neg_mean_squared_error", cv=10)
 rmse = np.sqrt(-scores)
 
 print("Training result")
@@ -71,11 +71,11 @@ print("RMSE:", rmse.mean())
 print("Standard deviation", rmse.std())
 
 # trainingX = np.c_[np.ones_like(trainingX),trainingX]
-print('MSE = ', mean_squared_error(trainingY, y_hat))
+print('MSE = ', mean_squared_error(training_y, y_hat))
 
 ''' ################ Testing ################## '''
-testing_x = np.loadtxt('x_test.txt')
-testing_y = np.loadtxt('y_test.txt')
+testing_x = np.loadtxt('test_x.txt')
+testing_y = np.loadtxt('test_y.txt')
 
 # testingX = np.c_[np.ones_like(testingX),testingX]
 if args.ln is False:
