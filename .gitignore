@@ -108,4 +108,7 @@ venv.bak/
 .idea
 *.iml
 *.pkl
-*.txt
+test_x.txt
+test_y.txt
+training_x.txt
+training_y.txt

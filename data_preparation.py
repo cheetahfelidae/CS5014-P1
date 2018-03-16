@@ -45,8 +45,8 @@ np.savetxt("training_x.txt", training_x)
 np.savetxt("training_y.txt", training_y)
 
 # test data set
-testing_x = testing_set.drop("Appliances", axis=1)
-testing_y = testing_set["Appliances"].copy()
+test_x = testing_set.drop("Appliances", axis=1)
+test_y = testing_set["Appliances"].copy()
 
-np.savetxt("test_x.txt", testing_x)
-np.savetxt("test_y.txt", testing_y)
+np.savetxt("test_x.txt", test_x)
+np.savetxt("test_y.txt", test_y)
